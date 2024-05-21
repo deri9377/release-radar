@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class Home {
     
 
-    @GetMapping("/greeting")
+    @GetMapping("/")
     public String getMethodName(Model model) {
         model.addAttribute("greeting", new Greeting());
         return "greeting";
     }
     
-    @PostMapping("/greeting")
+    @PostMapping("/")
     public String postMethodName(@ModelAttribute Greeting greeting, Model model) {
         //TODO: process POST request
         model.addAttribute("greeting", greeting);
