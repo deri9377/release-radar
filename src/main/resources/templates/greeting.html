@@ -6,9 +6,9 @@
 </head>
 <body>
 	<h1>Hello Welcome to Release Radar</h1>
-    <h4>please enter your name</h4>
+    <h4>please enter the artists you would like to follow in a comma seperated list</h4>
     <form action="#" th:action="@{/}" th:object="${greeting}" method="post">
-        <p>Name: <input type="text" th:field="*{name}" /></p>
+        <p>Artists: <input type="text" th:field="*{name}" /></p>
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>
 </body>

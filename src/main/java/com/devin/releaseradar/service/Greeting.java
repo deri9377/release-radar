@@ -1,5 +1,9 @@
-package com.devin.releaseradar;
+package com.devin.releaseradar.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.devin.releaseradar.components.Artist;
 
 public class Greeting {
 
@@ -13,5 +17,6 @@ public class Greeting {
     public void setName(String name) {
         this.name = name;
     }
+
     
 }
