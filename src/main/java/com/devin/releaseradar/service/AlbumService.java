@@ -8,7 +8,8 @@ import com.devin.releaseradar.repository.AlbumRepository;
 
 @Service
 public class AlbumService {
-        @Autowired
+    
+    @Autowired
     AlbumRepository albumRepository;
 
     public void save(Album album) {

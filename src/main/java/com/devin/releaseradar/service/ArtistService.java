@@ -30,13 +30,15 @@ public class ArtistService {
 
     @Autowired
     ArtistRepository artistRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
     
     private List<String> names;
     private List<Artist> artists;
-    private Token token;
 
 
-    public List<Artist> parseArtistsNames(String unparsedNames) {
+    public List<Artist> parseArtistsNames(String unparsedNames, Token token) {
         names = new ArrayList<>();
         String [] nameList = unparsedNames.split(",");
         for (String name : nameList) {
@@ -44,14 +46,13 @@ public class ArtistService {
         }
         artists = new ArrayList<>();
         for (String name: names) {
-            artists.add(createNewArtist(name));
+            artists.add(createNewArtist(name, token));
         }
         return artists;
     }
 
-    private Artist createNewArtist(String name) {
+    public Artist createNewArtist(String name, Token token) {
         System.out.println("finding " + name);
-        RestTemplate restTemplate = new RestTemplate();
         String resourceUrl = "https://api.spotify.com/v1/search?type=artist&q=" + name;
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer "+token.getAccess_token());
@@ -77,8 +78,7 @@ public class ArtistService {
 
     }
 
-    public Collection<Album> getAlbumsByArtist(Artist artist) {
-        RestTemplate restTemplate = new RestTemplate();
+    public Collection<Album> getAlbumsByArtist(Artist artist, Token token) {
         String resourceUrl = "https://api.spotify.com/v1/artists/" + artist.getId() + "/albums";
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer "+token.getAccess_token());
@@ -102,7 +102,7 @@ public class ArtistService {
         return null;
     }
 
-    private Artist parseArtists(Collection<Artist> artists, String name) {
+    public Artist parseArtists(Collection<Artist> artists, String name) {
         for (Artist artist: artists) {
             if (artist.getName().equals(name)) {
                 return artist;
@@ -123,10 +123,6 @@ public class ArtistService {
         List<Artist> artists = new ArrayList<>();
         artistRepository.findAll().forEach(artists::add);
         return artists;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
     }
 
 }

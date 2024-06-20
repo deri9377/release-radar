@@ -54,4 +54,8 @@ public class Artist {
     public String toString() {
         return "Name: " + getName() + " Id: " + getId();
     }
+
+    public boolean equals(Artist artist) {
+        return getName().equals(artist.getName());
+    }
 }

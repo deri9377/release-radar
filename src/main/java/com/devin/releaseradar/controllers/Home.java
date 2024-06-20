@@ -49,17 +49,16 @@ public class Home {
         //generate token
         AuthService authService = new AuthService();
         Token token = authService.getAuth(new Client("3e078e19a7584e069eacd7cd4a6e4fac", "b922b2a704e64e65a87438e01ba3b46a"));
-        artistService.setToken(token);
         System.out.println(token.getAccess_token());
 
         //parse names into new users
         System.out.println("Parsing Users");
-        List<Artist> artists = artistService.parseArtistsNames(greeting.getName());
+        List<Artist> artists = artistService.parseArtistsNames(greeting.getName(), token);
         //add greeting artists names to db
         System.out.println("Collecting Data");
         for (Artist artist: artists) {
             System.out.println(artist);
-            Collection<Album> albums = artistService.getAlbumsByArtist(artist);
+            Collection<Album> albums = artistService.getAlbumsByArtist(artist, token);
             for (Album album : albums) {
                 albumService.save(album);
                 System.out.println(album);
