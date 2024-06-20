@@ -1,13 +1,16 @@
 package com.devin.releaseradar.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-import com.devin.releaseradar.components.Artist;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Greeting {
 
     private String name;
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    private Date date;
     
 
     public String getName() {
@@ -17,6 +20,15 @@ public class Greeting {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Date getDate() {
+        return this.date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    
 
     
 }
