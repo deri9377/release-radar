@@ -2,48 +2,64 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
-        PATH = "$JAVA_HOME/bin:$PATH"
-        DOCKER_IMAGE_TAG = 'release-radar:latest'
+        GRADLE_HOME = tool name: 'Gradle', type: 'gradle'
+        PATH = "${GRADLE_HOME}/bin:${env.PATH}"
+        DOCKER_IMAGE = 'release-radar:latest'
+        DOCKER_REGISTRY = 'my-docker-registry' // Change this to your Docker registry if you use one
+        DOCKER_CREDENTIALS_ID = 'docker-credentials-id' // Change this to your Docker credentials ID in Jenkins
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-repo/your-project.git'
+            }
+        }
+
         stage('Build') {
             steps {
-                sh 'chmod +x gradlew'
-                sh "./gradlew clean build"
+                sh 'gradle clean build'
             }
         }
-        stage('Test') {
-            steps {
-                sh "./gradlew test"
-            }
-        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image
-                    docker.build(DOCKER_IMAGE_TAG, '-f Dockerfile .')
+                    def dockerImage = docker.build("${DOCKER_IMAGE}", '-f Dockerfile .')
                 }
             }
         }
-        stage('Deploy Docker Container') {
+
+        stage('Push Docker Image') {
             steps {
                 script {
-                    // Run Docker container
-                    docker.image(DOCKER_IMAGE_TAG).run('-d -p 8080:8080')
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Deploying the Docker container
+                    // Assuming you have a script or command to deploy the Docker container
+                    sh './deploy.sh' // Modify this according to your deployment process
                 }
             }
         }
     }
+
     post {
+        always {
+            cleanWs()
+        }
         success {
-            echo 'Pipeline successfully completed!'
-            // You can trigger notifications or further actions on success
+            echo 'Build and deployment completed successfully!'
         }
         failure {
-            echo 'Pipeline failed!'
-            // You can trigger notifications or rollback actions on failure
+            echo 'Build or deployment failed!'
         }
     }
 }
