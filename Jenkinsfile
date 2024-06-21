@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE_TAG = 'release-radar:latest'
+    }
+
     stages {
         stage('Build') {
             steps {
