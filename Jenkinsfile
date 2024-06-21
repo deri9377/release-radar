@@ -42,9 +42,6 @@ pipeline {
     }
 
     post {
-        always {
-            cleanWs()
-        }
         success {
             echo 'Build and deployment to local Docker completed successfully!'
         }
