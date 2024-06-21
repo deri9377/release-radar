@@ -33,7 +33,7 @@ pipeline {
                     """
 
                     // Run the new Docker container
-                    sh 'docker run -d --name release-radar-container -p 8000:8000 ${DOCKER_IMAGE}'
+                    sh 'docker run -d --name release-radar-container -p 8080:8000 ${DOCKER_IMAGE}'
                 }
             }
         }
