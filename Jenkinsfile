@@ -5,16 +5,9 @@ pipeline {
         GRADLE_HOME = tool name: 'Gradle', type: 'gradle'
         PATH = "${GRADLE_HOME}/bin:${env.PATH}"
         DOCKER_IMAGE = 'release-radar:latest'
-        DOCKER_REGISTRY = 'my-docker-registry' // Change this to your Docker registry if you use one
-        DOCKER_CREDENTIALS_ID = 'docker-credentials-id' // Change this to your Docker credentials ID in Jenkins
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/your-repo/your-project.git'
-            }
-        }
 
         stage('Build') {
             steps {
@@ -30,22 +23,19 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
-
         stage('Deploy') {
             steps {
                 script {
-                    // Deploying the Docker container
-                    // Assuming you have a script or command to deploy the Docker container
-                    sh './deploy.sh' // Modify this according to your deployment process
+                    // Stop and remove any existing container with the same name
+                    sh """
+                    if [ \$(docker ps -aq -f name=release-radar-container) ]; then
+                        docker stop release-radar-container
+                        docker rm release-radar-container
+                    fi
+                    """
+
+                    // Run the new Docker container
+                    sh 'docker run -d --name release-radar-container -p 8000:8000 ${DOCKER_IMAGE}'
                 }
             }
         }
@@ -56,10 +46,10 @@ pipeline {
             cleanWs()
         }
         success {
-            echo 'Build and deployment completed successfully!'
+            echo 'Build and deployment to local Docker completed successfully!'
         }
         failure {
-            echo 'Build or deployment failed!'
+            echo 'Build or deployment to local Docker failed!'
         }
     }
 }
