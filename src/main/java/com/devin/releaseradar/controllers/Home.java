@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +17,11 @@ import com.devin.releaseradar.components.Album;
 import com.devin.releaseradar.components.Artist;
 import com.devin.releaseradar.components.Client;
 import com.devin.releaseradar.components.Token;
-import com.devin.releaseradar.repository.AlbumRepository;
-import com.devin.releaseradar.repository.ArtistRepository;
 import com.devin.releaseradar.service.AlbumService;
 import com.devin.releaseradar.service.ArtistService;
-import com.devin.releaseradar.service.TrackService;
 import com.devin.releaseradar.service.AuthService;
 import com.devin.releaseradar.service.Greeting;
-
-import org.springframework.web.bind.annotation.RequestParam;
+import com.devin.releaseradar.service.TrackService;
 
 
 
@@ -51,7 +46,7 @@ public class Home {
 
     @GetMapping("/health-check")
     public ResponseEntity<String> getMethodName() {
-        return new ResponseEntity("Healthy", HttpStatus.OK);
+        return new ResponseEntity("Healthy!", HttpStatus.OK);
     }
     
     @PostMapping("/")
