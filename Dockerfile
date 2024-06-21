@@ -1,5 +1,5 @@
 # Use AdoptOpenJDK 17 as base image
-FROM adoptopenjdk:17-jdk-hotspot as builder
+FROM openjdk:17-alpine as builder
 
 # Set working directory inside the container
 WORKDIR /app
@@ -16,13 +16,13 @@ COPY src ./src
 RUN ./gradlew clean build
 
 # Second stage to create minimal runtime image
-FROM adoptopenjdk:17-jre-hotspot
+FROM openjdk:17-alpine
 
 # Set working directory inside the container
 WORKDIR /app
 
 # Copy JAR file from the builder stage
-COPY --from=builder /app/build/libs/your-application.jar ./app.jar
+COPY --from=builder /app/build/libs/release-radar-0.0.1-SNAPSHOT.jar ./app.jar
 
 # Expose port 8080
 EXPOSE 8000
