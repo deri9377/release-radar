@@ -5,8 +5,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copy the build artifacts from the build stage
-COPY build/libs/release-radar-0.0.1-SNAPSHOT.jar /app/release-radar-0.0.1-SNAPSHOT.jar
-COPY 
+COPY build/libs/release-radar-0.0.1-SNAPSHOT.jar /app/release-radar-0.0.1-SNAPSHOT.jar 
 
 # Expose the port your application runs on
 EXPOSE 8000
