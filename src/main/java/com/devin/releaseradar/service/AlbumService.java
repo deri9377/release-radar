@@ -16,4 +16,8 @@ public class AlbumService {
         albumRepository.save(album);
     }
 
+    public Album getAlbumById(String id) {
+        return albumRepository.findById(id).get();
+    }
+
 }

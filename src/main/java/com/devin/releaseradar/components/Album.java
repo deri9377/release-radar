@@ -2,6 +2,7 @@ package com.devin.releaseradar.components;
 
 import java.util.Collection;
 import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -17,7 +18,13 @@ public class Album {
     private Collection<Track> tracks;
     private Date release_date;
 
+    public Album() {
 
+    }
+
+    public Album(String name) {
+        this.name = name;
+    }
 
     public String getId() {
         return this.id;
@@ -52,7 +59,11 @@ public class Album {
         this.release_date = release_date;
     }
     
-    
+    @Override
+    public boolean equals(Object album) {
+        Album album1 = (Album) album;
+        return this.getName().equals(album1.getName());
+    }
     
     public String toString() {
         return "Album: " + getName() + " Id: " + getId() + " Date: " + getRelease_date();

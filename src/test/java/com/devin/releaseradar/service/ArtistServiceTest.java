@@ -17,10 +17,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.WebApplicationContext;
 
+import com.devin.releaseradar.components.Album;
 import com.devin.releaseradar.components.Artist;
 import com.devin.releaseradar.components.Token;
 
@@ -59,7 +58,6 @@ public class ArtistServiceTest {
         jsonList = jsonList.put(new JSONObject().put("name", "Mac Miller"));
         jsonItems = jsonItems.put("items", jsonList);
         jsonArtists = jsonArtists.put("artists", jsonItems);
-        System.out.println(jsonArtists.toString());
 
         Mockito
             .when(restTemplate.exchange(resourceUrl, HttpMethod.GET, requestEntity, String.class))
@@ -68,6 +66,32 @@ public class ArtistServiceTest {
         assertTrue(artist.equals(artistService.createNewArtist("Mac Miller", fakeToken)));
 
         
+    }
+
+    @Test
+    public void getAlbumsByArtist() {
+        Artist artist = new Artist("Mac Miller");
+        Album swimming = new Album("Swimming");
+        Album circles = new Album("Circles");
+        artist.setId("1");
+        Token fakeToken = new Token("1", "1", 1);
+        String resourceUrl = "https://api.spotify.com/v1/artists/" + artist.getId() + "/albums";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer "+ fakeToken.getAccess_token());
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+        JSONObject jsonItems = new JSONObject();
+        JSONArray jsonList = new JSONArray();
+
+        jsonList = jsonList.put(new JSONObject().put("name", "Circles"));
+        jsonList = jsonList.put(new JSONObject().put("name", "Swimming"));
+        jsonItems = jsonItems.put("items", jsonList);
+
+        Mockito
+            .when(restTemplate.exchange(resourceUrl, HttpMethod.GET, requestEntity, String.class))
+            .thenReturn(new ResponseEntity(jsonItems.toString(), HttpStatus.OK));
+
+        assertTrue(artistService.getAlbumsByArtist(artist, fakeToken).size() == 2);
     }
 
 }
