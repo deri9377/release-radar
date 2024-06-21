@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh "./gradlew build"
+                sh 'chmod +x gradlew'
+                sh "./gradlew clean build"
             }
         }
         stage('Test') {
@@ -12,10 +13,31 @@ pipeline {
                 sh "./gradlew test"
             }
         }
-        stage('Deploy') {
+        stage('Build Docker Image') {
             steps {
-                sh "./gradlew bootRun"
+                script {
+                    // Build Docker image
+                    docker.build(DOCKER_IMAGE_TAG, '-f Dockerfile .')
+                }
             }
+        }
+        stage('Deploy Docker Container') {
+            steps {
+                script {
+                    // Run Docker container
+                    docker.image(DOCKER_IMAGE_TAG).run('-d -p 8080:8080')
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline successfully completed!'
+            // You can trigger notifications or further actions on success
+        }
+        failure {
+            echo 'Pipeline failed!'
+            // You can trigger notifications or rollback actions on failure
         }
     }
 }
