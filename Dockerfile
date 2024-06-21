@@ -11,4 +11,4 @@ COPY build/libs/*.jar /app/release-radar.jar
 EXPOSE 8000
 
 # Command to run the application
-CMD ["java", "-jar", "release-radar.jar"]
+CMD ["java", "-jar", "release-radar.jar", "--server.port=8000"]
