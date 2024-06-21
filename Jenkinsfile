@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'release-radar-0.0.1-SNAPSHOT:latest'
+        DOCKER_IMAGE = 'release-radar:latest'
     }
 
     stages {
