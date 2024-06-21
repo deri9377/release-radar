@@ -2,8 +2,6 @@ pipeline {
     agent any
 
     environment {
-        GRADLE_HOME = tool name: 'Gradle', type: 'gradle'
-        PATH = "${GRADLE_HOME}/bin:${env.PATH}"
         DOCKER_IMAGE = 'release-radar:latest'
     }
 
