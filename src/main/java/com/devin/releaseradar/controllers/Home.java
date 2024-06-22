@@ -38,7 +38,7 @@ public class Home {
     TrackService trackService;
 
     @GetMapping("/")
-    public String getMethodName(Model model) {
+    public String homePage(Model model) {
         model.addAttribute("artists", artistService.getArtists());
         model.addAttribute("greeting", new Greeting());
         return "greeting";
@@ -50,7 +50,7 @@ public class Home {
     }
     
     @PostMapping("/")
-    public String postMethodName(@ModelAttribute Greeting greeting, Model model) {
+    public String followArtists(@ModelAttribute Greeting greeting, Model model) {
         //TODO: process POST request
         //generate token
         AuthService authService = new AuthService();
